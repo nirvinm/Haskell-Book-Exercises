@@ -40,35 +40,32 @@ shift f i k = let i' = ord i - 65
               in  chr $ ((f i' k') `mod` 26) + 65
 
 
-crypt' :: (Int -> Int -> Int) -> [Char] -> [Char] -> Int -> Int -> [Char] -> [Char]
--- crypt' applies given artithmetic function and does Vigenere encryption/decryption
--- Logic: 1. Take current character from the input
---        2. If current character is not space
---                1. Compute which character of key should be used for crypto
---                2. Apply crypto function and increment charCount
---                3. Set this as cipher character
---        3. If current character is space then set space itself as cipher character
---        4. Append the cipher character to the output string
---        5. Calculate cipher by passing continuations recursively.
--- input is the string to be encrypted
--- key is encyption/decryption password without space
--- iteration - Continuation passing - Current position in the input 
--- charCount - Continuation passing - Number of characters encountered in the input excluding spaces.
--- outputList - Continuation passing - Encrypted output string
-crypt' cryptFunc input key iteration charCount outputList 
-    | length input <= iteration = outputList
-    | otherwise = 
-        let c = input !! iteration
-            chipherC = if c == ' ' then ' ' else shift cryptFunc c $ key !! (mod charCount $ length key)
-            nextCharCount = if c == ' ' then charCount else charCount + 1 
-        in crypt' cryptFunc input key (iteration+1) nextCharCount (outputList ++ [chipherC])
-
+crypt :: (Int -> Int -> Int) -> (String, Int) -> (String, Int) -> String -> String
+-- crypt applies given artithmetic function and does Vigenere encryption/decryption.
+-- This function moves forward on the string, encrypts the
+-- current char using corresponding char in key. It maintains
+-- current position of the string and key it is working on. When
+-- it encounters space, it skips the en(de)cryption and doen't move forward
+-- in the key. After encrypting the current char, it recursively calls
+-- itself by passing next positions in string to be encrypted along with
+-- position of key.
+crypt cryptFunc (words', wpos) (key, kpos) cipherText
+    | length words' <= wpos =  cipherText
+    | otherwise =
+        let c  = words' !! wpos
+            c' = case c of 
+                    ' ' -> ' '
+                    _ -> shift cryptFunc c $  key !! kpos
+            kpos' = case c of
+                    ' ' -> kpos `mod` (length key)
+                    _   -> (kpos + 1) `mod` (length key)
+            in crypt cryptFunc (words', wpos + 1) (key, kpos') (cipherText ++ [c'])
 
 encrypt :: [Char] -> [Char] -> [Char]
-encrypt i k = crypt' (+) i k 0 0 []
+encrypt i k = crypt (+) (i, 0) (k, 0) []
 
 decrypt :: [Char] -> [Char] -> [Char]
-decrypt i k = crypt' (-) i k 0 0 []
+decrypt i k = crypt (-) (i, 0) (k, 0) []
 
 -- input = "MEET AT DAWN"
 -- key = "ALLY"
