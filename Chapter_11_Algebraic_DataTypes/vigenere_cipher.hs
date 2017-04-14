@@ -20,53 +20,38 @@
 -- for our second character sets a rightward shift of 11, so ’E’ becomes
 -- ’P’. And so on, so “meet at dawn” encoded with the keyword “ALLY”
 -- becomes “MPPR AE OYWY.”
--- 
--- Like the Caesar cipher, you can find all kinds of resources to
--- help you understand the cipher and also many examples written
--- in Haskell. Consider using a combination of chr, ord, and mod again,
--- possibly very similar to what you used for writing the original Caesar
--- cipher.
+
+-- Identifiers :
+-- k - Key
+-- p - Plain text
+-- c - Single character
 
 module VigenereChipher where
 
 import Data.Char
 
-shift :: (Int -> Int -> Int) -> Char -> Char -> Char
--- shift applies a arithmetic function to given characters
--- after converting it from ASCII value to Int
--- This can be used to Encrypt or Decrypt the character
-shift f i k = let i' = ord i - 65
-                  k' = ord k - 65
-              in  chr $ ((f i' k') `mod` 26) + 65
+alphabetSize :: Int
+alphabetSize = 26
 
+fromInt :: Int -> Char
+fromInt i = chr $ (i `mod` alphabetSize) + 65
 
-crypt :: (Int -> Int -> Int) -> (String, Int) -> (String, Int) -> String -> String
--- crypt applies given artithmetic function and does Vigenere encryption/decryption.
--- This function moves forward on the string, encrypts the
--- current char using corresponding char in key. It maintains
--- current position of the string and key it is working on. When
--- it encounters space, it skips the en(de)cryption and doen't move forward
--- in the key. After encrypting the current char, it recursively calls
--- itself by passing next positions in string to be encrypted along with
--- position of key.
-crypt cryptFunc (words', wpos) (key, kpos) cipherText
-    | length words' <= wpos =  cipherText
-    | otherwise =
-        let c  = words' !! wpos
-            c' = case c of 
-                    ' ' -> ' '
-                    _ -> shift cryptFunc c $  key !! kpos
-            kpos' = case c of
-                    ' ' -> kpos `mod` (length key)
-                    _   -> (kpos + 1) `mod` (length key)
-            in crypt cryptFunc (words', wpos + 1) (key, kpos') (cipherText ++ [c'])
+toInt :: Char -> Int
+toInt c = (ord c - 65) `mod` alphabetSize
 
-encrypt :: [Char] -> [Char] -> [Char]
-encrypt i k = crypt (+) (i, 0) (k, 0) []
+encFunc :: Char -> Char -> Char
+encFunc c k = fromInt $ (toInt c) + (toInt k)
 
-decrypt :: [Char] -> [Char] -> [Char]
-decrypt i k = crypt (-) (i, 0) (k, 0) []
+decFunc :: Char -> Char -> Char
+decFunc c k = fromInt $ (toInt c) - (toInt k)
 
--- input = "MEET AT DAWN"
--- key = "ALLY"
--- output = "MPPR AE OYWY"
+crypt :: (Char -> Char -> Char) -> String -> String -> String
+crypt _ [] _ = []
+crypt f (' ':ps) ks = ' ' : crypt f ps ks
+crypt f (p:ps) (k:ks) = (f p k) : crypt f ps ks
+
+encrypt :: String -> String -> String
+encrypt p k = crypt encFunc p (cycle k)
+
+decrypt :: String -> String -> String
+decrypt p k = crypt decFunc p (cycle k)
