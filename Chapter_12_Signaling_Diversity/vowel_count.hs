@@ -6,24 +6,21 @@
 -- 0
 -- >>> countTheBeforeVowel "the evil cow"
 -- 1
-
-
--- [the, evil, cow]
--- [evil, cow]
-
-
 vowels :: [Char]
 vowels = "aAeEiIoOuU"
 
-theFollowsA :: (String, String) -> Bool
-theFollowsA (x, (y:_)) = case (x, elem y vowels) of
+isVowel :: Char -> Bool
+isVowel = flip elem vowels
+
+theFollowsVowels :: (String, String) -> Bool
+theFollowsVowels (x, (y:_)) = case (x, isVowel y) of
                               ("the", True) -> True
                               ("The", True) -> True
                               _     -> False
-theFollowsA _ = False
+theFollowsVowels _ = False
 
 zipNextWord :: String -> [(String, String)]
 zipNextWord s = zip (words s)  (tail $ words s)
 
 countTheBeforeVowel :: String -> Int
-countTheBeforeVowel s = length [x | x <- map theFollowsA $ zipNextWord s, x == True]
+countTheBeforeVowel s = length [x | x <- map theFollowsVowels $ zipNextWord s, x == True]
