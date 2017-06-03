@@ -6,8 +6,8 @@ module Subsequence where
 -- contiguous.
 isSubsequenceOf :: (Eq a) => [a] -> [a] -> Bool
 isSubsequenceOf [] _ = True
-isSubsequenceOf ks [] = False
-isSubsequenceOf ks@(k:ks') xs@(x:xs') =
+isSubsequenceOf _ [] = False
+isSubsequenceOf ks@(k:ks') (x:xs') =
     if k == x
     then isSubsequenceOf ks' xs'
     else isSubsequenceOf ks  xs'
