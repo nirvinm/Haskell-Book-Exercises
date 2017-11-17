@@ -5,7 +5,7 @@ import Data.List
 import Test.QuickCheck
 
 genAlphabet :: Gen Alphabet
-genAlphabet = oneof $ map (\k -> return $ Alphabet k) $ ['A'..'Z'] ++ [' ']
+genAlphabet = oneof $ map (\k -> return $ Alphabet k) $ [' ', 'A'..'Z']
 
 instance Arbitrary Alphabet where 
     arbitrary = genAlphabet
