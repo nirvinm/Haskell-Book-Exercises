@@ -1,5 +1,3 @@
-{-# LANGUAGE RankNTypes #-}
-
 module Lib where
 
 newtype Identity a = Identity a deriving (Eq, Show)
@@ -55,5 +53,3 @@ data Sum a b =
 instance Functor (Sum a) where
     fmap f (First a) = First a
     fmap f (Second b) = Second (f b)
-
-type Nat f g = forall a . f a -> g a
