@@ -1,4 +1,4 @@
-import Test.QuickCheck hiding (Success)
+import Test.QuickCheck
 import Test.QuickCheck.Checkers
 import Test.QuickCheck.Classes
 import ListApplicative
