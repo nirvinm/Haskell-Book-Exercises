@@ -24,6 +24,9 @@ dependencies:
 
 library:
   source-dirs: src
+  dependencies:
+    - QuickCheck
+    - checkers
 
 executables:
   Applicative-exe:
@@ -46,3 +49,5 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - Applicative
+    - QuickCheck
+    - checkers
