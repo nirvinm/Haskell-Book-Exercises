@@ -15,4 +15,9 @@ main = do
     quickBatch $ applicative (undefined :: Validation String (String, Char, Int))
     quickBatch $ functor (undefined :: Pair (String, Char, Int))
     quickBatch $ applicative (undefined :: Pair (String, Char, Int))
-    
+    quickBatch $ functor (undefined :: Two String (String, Char, Int))
+    quickBatch $ applicative (undefined :: Two String (String, Char, Int))
+    quickBatch $ functor (undefined :: Three String String (String, Char, Int))
+    quickBatch $ applicative (undefined :: Three String String (String, Char, Int))
+    quickBatch $ functor (undefined :: Three' String (String, Char, Int))
+    quickBatch $ applicative (undefined :: Three' String (String, Char, Int))
