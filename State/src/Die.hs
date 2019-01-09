@@ -1,4 +1,4 @@
-module Lib where
+module Die where
 
 import Control.Applicative (liftA3)
 import Control.Monad (replicateM)
