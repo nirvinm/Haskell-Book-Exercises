@@ -1,4 +1,6 @@
 module Main where
 
+import FizzBuzz
+
 main :: IO ()
-main = putStrLn "Hello World"
+main = mapM_ putStrLn $ fizzbuzzList [1..100]
