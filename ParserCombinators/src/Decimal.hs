@@ -22,9 +22,8 @@ parseDecimal = do
 
 fractionOrDecimal :: Parser DoubleOrRational
 fractionOrDecimal =
-        (Left <$> try parseDecimal)
-    <|> (Right <$> try parseFraction)
-    <|> (fail  "Expected Fraction or Decimal.")
+        (Left <$> try parseDecimal <?> "Decimal")
+    <|> (Right <$> try parseFraction <?> "Fraction")
 
 main :: IO ()
 main = do
