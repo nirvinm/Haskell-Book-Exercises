@@ -26,6 +26,7 @@ dependencies:
 - raw-strings-qq
 - bytestring
 - containers
+- time
 - hspec
 
 library:
