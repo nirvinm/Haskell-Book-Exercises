@@ -21,6 +21,11 @@ instance (Applicative f, Applicative g) => Applicative (Compose f g) where
     (Compose f) <*> (Compose a)
         = Compose $ (<*>) <$> f <*> a
 
+{-
+instance (Monad f, Monad g) => Monad (Compose f g) where  
+    (>>=) :: Compose f g a -> (a -> Compose f g b) -> Compose f g b
+    (Compose fga) >>= h = (fmap.fmap) h fga
+-}
 
 -- Exercises: Compose Instances
 -- 1. Write the Compose Foldable instance.
