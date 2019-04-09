@@ -38,4 +38,4 @@ embedded' :: MaybeT
             (ExceptT String
                      (ReaderT () IO))
             Int
-embedded' = undefined -- STUCK HERE.
+embedded' = MaybeT . ExceptT . ReaderT $ pure . (const (Right (Just 1)))
