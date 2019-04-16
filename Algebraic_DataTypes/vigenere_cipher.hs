@@ -26,9 +26,17 @@
 -- p - Plain text
 -- c - Single character
 
-module VigenereChipher where
+{-# LANGUAGE PatternGuards #-}
+
+module VigenereCipher where
 
 import Data.Char
+
+type Key = String
+type PlainText = String
+type Secret = String
+type CryptFunction = Char -> Char -> Char
+
 
 alphabetSize :: Int
 alphabetSize = 26
@@ -39,19 +47,22 @@ fromInt i = chr $ (i `mod` alphabetSize) + 65
 toInt :: Char -> Int
 toInt c = (ord c - 65) `mod` alphabetSize
 
-encFunc :: Char -> Char -> Char
-encFunc c k = fromInt $ (toInt c) + (toInt k)
+add :: CryptFunction
+add k c = fromInt $ (toInt c) + (toInt k)
 
-decFunc :: Char -> Char -> Char
-decFunc c k = fromInt $ (toInt c) - (toInt k)
+sub :: CryptFunction
+sub k c = fromInt $ (toInt c) - (toInt k)
 
-crypt :: (Char -> Char -> Char) -> String -> String -> String
-crypt _ [] _ = []
-crypt f (' ':ps) ks = ' ' : crypt f ps ks
-crypt f (p:ps) (k:ks) = (f p k) : crypt f ps ks
+apply :: CryptFunction -> Key -> String -> String
+apply _ [] _ = []
+apply _ _ [] = []
+apply f all@(k:ks) (x:xs) =
+    let go | isAlpha x = f k x : apply f ks xs
+           | otherwise = x     : apply f all xs
+    in go
 
-encrypt :: String -> String -> String
-encrypt p k = crypt encFunc p (cycle k)
+encrypt :: Key -> PlainText -> Secret
+encrypt k = apply add (cycle k)
 
-decrypt :: String -> String -> String
-decrypt p k = crypt decFunc p (cycle k)
+decrypt :: Key -> Secret -> PlainText
+decrypt k = apply sub (cycle k)
