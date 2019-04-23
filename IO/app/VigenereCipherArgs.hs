@@ -1,4 +1,4 @@
-module CmdArgsParser where
+module VigenereCipherArgs where
 
 import Options.Applicative
 import Data.Semigroup ((<>))

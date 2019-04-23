@@ -4,10 +4,8 @@
 module IniParser where
 
 import Control.Applicative
-import Data.ByteString (ByteString)
 import Data.Map (Map)
 import qualified Data.Map as M
-import Text.RawString.QQ
 import Text.Trifecta
 
 -- INI File Format
@@ -53,7 +51,7 @@ parseBracketPair p =
 
 parseHeader :: Parser Header
 parseHeader = 
-    parseBracketPair (Header <$> some letter)
+    parseBracketPair (Header <$> some alphaNum)
 
 parseAssignment :: Parser (Name, Value)
 parseAssignment = do
@@ -86,43 +84,3 @@ parseIni = do
     return $ Config mapOfSections
 
 
-
------------------------------------------
--- Examples
------------------------------------------
-
-headerEx :: ByteString
-headerEx = "[blah]"
-
-commentEx :: ByteString
-commentEx =
-    "; last modified 1 April\
-    \ 2001 by John Doe"
-
-commentEx' :: ByteString
-commentEx' =
-    "; blah\n; woot\n  \n;hah"
-
-sectionEx :: ByteString
-sectionEx =
-    "; ignore me\n[states]\nChris=Texas"
-
-assignmentEx :: ByteString
-assignmentEx = "woot=1"
-
-sectionEx' :: ByteString
-sectionEx' = [r|
-; ignore me
-[states]
-Chris=Texas
-|]
-
-sectionEx'' :: ByteString
-sectionEx'' = [r|
-; comment
-[section]
-host=wikipedia.org
-alias=claw
-[whatisit]
-red=intoothandclaw
-|]
