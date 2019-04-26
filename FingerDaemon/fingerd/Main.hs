@@ -115,7 +115,7 @@ handleCommand conn soc = do
             case result of
                 Success a -> do
                     addUser conn a
-                    sendAll soc "User added."
+                    sendAll soc "User added.\n"
                 Failure e ->
                     sendAll soc (toBS e)
         otherwise ->
