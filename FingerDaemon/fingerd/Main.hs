@@ -103,7 +103,9 @@ handleQueries dbConn sock = forever $ do
     sClose soc
 
 
-handleCommand :: Connection -> Socket -> IO ()
+handleCommand :: Connection
+              -> Socket
+              -> IO ()
 handleCommand conn soc = do
     msg <- fromBS <$> recv soc 1024
     putStrLn "Command received, processing\n"
