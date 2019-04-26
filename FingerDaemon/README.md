@@ -10,7 +10,7 @@ To add user while running `fingerd`, do this
     Connected to localhost.
     Escape character is '^]'.
     
-    :add "julie" "bash" "/home/julie" "Julie" "000-123-4567"`
+    :add "julie" "bash" "/home/julie" "Julie" "000-123-4567"
     
     User added.
     Connection closed by foreign host.
