@@ -9,11 +9,13 @@ data List a =
     | Cons a (List a)
     deriving (Eq, Show)
 
+instance Semigroup (List a) where
+    Nil <> ys = ys
+    (Cons x xs) <> ys = Cons x (xs `mappend` ys)
+
 instance  Monoid (List a) where
     mempty = Nil
-    mappend Nil ys = ys
-    mappend (Cons x xs) ys = Cons x (xs `mappend` ys)
-
+    
 instance Functor List where
     fmap _ Nil = Nil
     fmap f (Cons x ls) = Cons (f x) (fmap f ls)
