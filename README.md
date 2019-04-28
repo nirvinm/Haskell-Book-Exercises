@@ -18,19 +18,19 @@ Each chapter is divided into seperate `Stack` project. All the projects are comp
 
 **To load individual Haskell file**
 
-> $ stack ghci <filename.hs>
+    $ stack ghci <filename.hs>
 
 **To compile Stack project**
 
-> $ stack build
+    $ stack build
 
 **To load Stack project in `GHCI`**
 
-> $ stack ghci
+    $ stack ghci
 
 **To run `QuickCheck` tests**
 
-> $ stack test
+    $ stack test
 
 
 Other Haskell Book solutions
